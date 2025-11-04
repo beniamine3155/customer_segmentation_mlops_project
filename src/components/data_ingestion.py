@@ -32,6 +32,12 @@ class DataIngestion:
             logging.info("Exporting data from MongoDB to pandas DataFrame")
             customer_data = CustomerData()
             df = customer_data.export_collection_as_dataframe(collection_name=self.data_ingestion_config.collection_name)
+            
+            # Remove MongoDB's _id column if it exists
+            if '_id' in df.columns:
+                logging.info("Removing MongoDB '_id' column from DataFrame")
+                df = df.drop(columns=['_id'])
+            
             feature_store_file_path = self.data_ingestion_config.feature_store_file_path
             dir_path = os.path.dirname(feature_store_file_path)
             os.makedirs(dir_path, exist_ok=True)

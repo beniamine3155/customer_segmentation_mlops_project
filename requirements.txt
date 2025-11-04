@@ -7,4 +7,6 @@ streamlit
 ipykernel
 pymongo
 from_root
+dill
+PyYAML
 -e .
