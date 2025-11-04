@@ -16,3 +16,9 @@ class DataTransformationArtifact:
     scaler_object_path: str
     feature_columns: list
 
+@dataclass
+class ModelTrainerArtifact:
+    trained_model_file_path: str
+    train_metric_artifact: dict
+    test_metric_artifact: dict
+
