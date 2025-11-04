@@ -48,3 +48,10 @@ MODEL_TRAINER_TRAINED_MODEL_DIR: str = "trained_model"
 MODEL_TRAINER_TRAINED_MODEL_NAME: str = "model.pkl"
 MODEL_TRAINER_EXPECTED_SCORE: float = 0.6
 MODEL_TRAINER_MODEL_CONFIG_FILE_PATH: str = os.path.join("config", "model.yaml")
+
+"""
+Model Evaluation related constant start with MODEL_EVALUATION VAR NAME
+"""
+MODEL_EVALUATION_DIR_NAME: str = "model_evaluation"
+MODEL_EVALUATION_REPORT_FILE_NAME: str = "evaluation_report.yaml"
+MODEL_EVALUATION_CHANGED_THRESHOLD_SCORE: float = 0.02
