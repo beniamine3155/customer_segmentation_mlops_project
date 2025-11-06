@@ -31,3 +31,8 @@ class ModelEvaluationArtifact:
     train_model_metric_artifact: dict
     best_model_metric_artifact: dict
 
+@dataclass
+class ModelPusherArtifact:
+    bucket_name:str
+    s3_model_path:str
+

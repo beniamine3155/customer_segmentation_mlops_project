@@ -1,5 +1,6 @@
 import os
 import sys
+import pandas as pd
 
 from pandas import DataFrame
 from src.logger import logging
@@ -24,19 +25,37 @@ class DataIngestion:
         """
         Method Name: export_data_from_mongo
         Description: Export the entire collection as a pandas DataFrame.
+        If MongoDB is not available, fallback to local CSV data.
 
         Outputs: data is returned as artifact of data ingestion component
         On failure: Raise Exception
         """
         try:
-            logging.info("Exporting data from MongoDB to pandas DataFrame")
-            customer_data = CustomerData()
-            df = customer_data.export_collection_as_dataframe(collection_name=self.data_ingestion_config.collection_name)
+            logging.info("Attempting to export data from MongoDB to pandas DataFrame")
             
-            # Remove MongoDB's _id column if it exists
-            if '_id' in df.columns:
-                logging.info("Removing MongoDB '_id' column from DataFrame")
-                df = df.drop(columns=['_id'])
+            # Try MongoDB first
+            try:
+                customer_data = CustomerData()
+                df = customer_data.export_collection_as_dataframe(collection_name=self.data_ingestion_config.collection_name)
+                logging.info("Successfully exported data from MongoDB")
+                
+                # Remove MongoDB's _id column if it exists
+                if '_id' in df.columns:
+                    logging.info("Removing MongoDB '_id' column from DataFrame")
+                    df = df.drop(columns=['_id'])
+                    
+            except Exception as mongo_error:
+                logging.warning(f"MongoDB connection failed: {mongo_error}")
+                logging.info("Falling back to local CSV data")
+                
+                # Fallback to local CSV data
+                local_data_path = "notebook/customer_segmentation.csv"
+                if os.path.exists(local_data_path):
+                    logging.info(f"Loading data from local file: {local_data_path}")
+                    df = pd.read_csv(local_data_path)
+                    logging.info(f"Successfully loaded data from local file with shape: {df.shape}")
+                else:
+                    raise Exception(f"Neither MongoDB nor local data file ({local_data_path}) is available")
             
             feature_store_file_path = self.data_ingestion_config.feature_store_file_path
             dir_path = os.path.dirname(feature_store_file_path)

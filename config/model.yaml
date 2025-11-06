@@ -10,8 +10,8 @@ grid_search:
     linkage: ['ward', 'complete', 'average']
   
   DBSCAN:
-    eps: [0.5, 1.0, 1.5, 2.0]
-    min_samples: [5, 10, 15, 20]
+    eps: [0.1, 0.3, 0.5, 0.7, 1.0]
+    min_samples: [3, 5, 8, 10]
 
 evaluation_metrics:
   - silhouette_score
